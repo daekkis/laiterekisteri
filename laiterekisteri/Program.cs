@@ -1,126 +1,206 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Laiterekisteri
+namespace Laitekirjasto
 {
-    // Base class for devices
+    // LUOKKAMÄÄRITYKSET
+    // =================
+
+    // Yleinen laiteluokka, yliluokka tietokoneille, tableteille ja puhelimille
     class Device
     {
-        // Fields
-        // ------
-        string identity = "Uusi laite";
-        string dateBought = "1.1.2000";
-        double price = 0.00d;
+        // Kentät ja ominaisuudet
+        // ----------------------
+
+        // Luodaan kenttä (field) name, esitellään (define) ja annetaan arvo (set initial value)
+        string name = "Uusi laite";
+
+        // Luodaan kenttää vastaava ominaisuus (property) Name ja sille asetusmetodi set ja lukumetodi get. Ne voi kirjoittaa joko yhdelle tai useammalle riville
+        public string Name { get { return name; } set { name = value; } }
+
+        string purchaseDate = "1.1.1900";
+        public string PurchaseDate { get { return purchaseDate; } set { purchaseDate = value; } }
+
+        // Huomaa jälkiliite d (suffix)
+        double price = 0.0d;
+        public double Price { get { return price; } set { price = value; } }
+
         int warranty = 12;
+        public int Warranty { get { return warranty; } set { warranty = value; } }
 
-        // Properties
-        // ----------
-        public string Identity
-        {
-            get { return identity; }
-            set { identity = value; }
 
-        }
+        string processorType = "N/A";
+        public string ProcessorType { get { return processorType; } set { processorType = value; } }
 
-        public string DateBought
-        {
-            get { return dateBought; }
-            set { dateBought = value; }
-        }
+        int amountRAM = 0;
+        public int AmountRam { get { return amountRAM; } set { amountRAM = value; } }
 
-        public double Price
-        {
-            get { return price; }
-            set { price = value; }
-        }
+        int storageCapacity = 0;
+        public int StorageCapacity { get { return storageCapacity; } set { storageCapacity = value; } }
 
-        public int Warranty
-        {
-            get { return warranty; }
-            set { warranty = value; }
-        }
+        // Konstruktorit
+        // -------------
 
-        // Constructors
-        // ------------
-
+        // Konstruktori eli olionmuodostin (constructor) ilman argumentteja
         public Device()
         {
 
         }
-        // A constructor with one argument
-        public Device(string identity)
+
+        // Konstruktori nimi-argumentilla
+        public Device(string name)
         {
-            this.identity = identity;
+            this.name = name;
         }
 
-        // Another constructor with all arguments
-        public Device(string identity, string dateBought, double price, int warranty)
+        // Konstruktori kaikilla argumenteilla
+        public Device(string name, string purchaseDate, double price, int warranty)
         {
-            this.identity = identity;
-            this.dateBought = dateBought;
+            this.name = name;
+            this.purchaseDate = purchaseDate;
             this.price = price;
             this.warranty = warranty;
         }
 
-        // Other methods
-        // -------------
+        // Muut metodit
+        // ------------
+
+        // Yliluokan metodit
+        public void ShowPurchaseInfo()
+        {
+            // Luetaan laitteen ostotiedot sen kentistä, huom! this
+            Console.WriteLine();
+            Console.WriteLine("Laitteen hankintatiedot");
+            Console.WriteLine("-----------------------");
+            Console.WriteLine("Laitteen nimi: " + this.name);
+            Console.WriteLine("Ostopäivä: " + this.purchaseDate);
+            Console.WriteLine("Hankinta: " + this.price);
+            Console.WriteLine("Takuu: " + this.warranty + " kk");
+        }
+
+        // Luetaan laitteen yleiset tekniset tiedot ominaisuuksista, huom iso alkukirjain
+        public void ShowBasicTechnicalInfo()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Laitteen tekniset tiedot");
+            Console.WriteLine("------------------------");
+            Console.WriteLine("Koneen nimi: " + Name);
+            Console.WriteLine("Prosessori: " + ProcessorType);
+            Console.WriteLine("Keskusmuisti: " + AmountRam);
+            Console.WriteLine("Levytila: " + StorageCapacity);
+
+
+        }
+
     }
 
-    // Class for computers, inherits Device class
+    // Tietokoneiden luokka, perii ominaisuuksia ja metodeja laiteluokasta Device
+
     class Computer : Device
     {
 
+        // Konstruktorit
+        public Computer() : base()
+        { }
+
+        public Computer(string name) : base(name)
+        { }
+
+        // Muut metodit
+
     }
 
-    // Class for computers, inherits Device class
-    class SmartPhone : Device
-    {
-        // Fields
-
-        // Properties
-
-        // Constructors
-
-        // Other methods
-    }
-
-    // Class for computers, inherits Device class
+    // Tablettien luokka, perii laiteluokan
     class Tablet : Device
     {
-        // Fields
+        // Kentät ja ominaisuudet
+        // ----------------------
 
-        // Properties
+        string operatingSystem;
+        public string OperatingSystem { get { return operatingSystem; } set { operatingSystem = value; } }
+        bool stylusEnabled = false;
+        public bool StylusEnabled { get { return stylusEnabled; } set { stylusEnabled = value; } }
 
-        // Constructors
+        // Konstruktortit
+        // --------------
 
-        // Other methods
+        public Tablet() : base() { }
+
+        public Tablet(string name) : base(name) { }
+
+
+        // Tablet-luokan erikoismetodit
+        // ----------------------------
+        public void TabletInfo()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Tabletin erityitiedot");
+            Console.WriteLine("---------------------");
+            Console.WriteLine("Käyttöjärjestelmä: " + OperatingSystem);
+            Console.WriteLine("Kynätuki: " + StylusEnabled);
+        }
+
     }
+    // Pääohjelman luokka, josta tulee Program.exe
+    // ===========================================
     internal class Program
     {
+        // Ohjelman käynnistävä metodi
+        // ---------------------------
         static void Main(string[] args)
         {
-            // Let's create an test object from the Device class with default constructor (0 parameters)
-            Device device1 = new Device();
-            Console.WriteLine(device1.Identity);
+            // Olioiden luominen ja metodien testaus
+            // -------------------------------------
 
-            // Let's create another device with identity parameter
-            Device device2 = new Device("Toinen laite");
-            Console.WriteLine(device2.Identity);
+            // Luodaan uusi tietokone, joka perii laiteluokan (Device) ominaisuudet ja metodit
 
-            // Set device2 warranty to 60 months
-            device2.Warranty = 60;
+            Computer tietokone1 = new Computer();
 
-            Console.WriteLine("Takuutiedoksi päivitetty: " + device2.Warranty);
+            // Asetetaan ensimmäisen tietokoneen ominaisuuksien arvot
+            tietokone1.ProcessorType = "Intel I7";
+            tietokone1.AmountRam = 16;
+            tietokone1.PurchaseDate = "15.2.2024";
+            tietokone1.Price = 850.00d;
+            tietokone1.Warranty = 36;
 
-            // Let's create one more device with all parameters
-            Device device3 = new Device("Kolmas kone", "8.2.2024", 150.00d, 36);
+            Console.WriteLine("Tietokone 1");
+            Console.WriteLine("===========");
+            tietokone1.ShowPurchaseInfo();
 
-            Console.WriteLine(device3.Identity);
-            Console.WriteLine(device3.Price);
 
+            // Luodaan uusi nimetty tietokone 
+            Computer tietokone2 = new Computer("Enskun läppäri");
+            tietokone2.ProcessorType = "Intel Core i7 vPro";
+            tietokone2.AmountRam = 32;
+
+            Console.WriteLine("Tietokone 2");
+            Console.WriteLine("===========");
+            tietokone2.ShowBasicTechnicalInfo();
+
+            // Luodaan testiolio tabletille
+
+            Tablet tabletti1 = new Tablet("Enskun iPad");
+            tabletti1.PurchaseDate = "1.10.2022";
+            tabletti1.OperatingSystem = "IOS";
+            tabletti1.StylusEnabled = true;
+
+            // Näytetään tietoja metodien avulla
+
+            tabletti1.ShowPurchaseInfo();
+
+
+            tabletti1.ShowBasicTechnicalInfo();
+
+            Console.WriteLine("Tabletti 1");
+            Console.WriteLine("==========");
+            tabletti1.TabletInfo();
+
+
+            // Pidetään ikkuna auki, kunnes käyttäjä painaa <enter>
             Console.ReadLine();
         }
     }
